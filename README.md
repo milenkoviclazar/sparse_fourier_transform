@@ -1,2 +1,2 @@
-# sparse_fourier_transform
-Sparse Fourier Transform
+# Sparse Fourier Transform
+

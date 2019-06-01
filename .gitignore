@@ -1,5 +1,13 @@
+.idea/
+cmake-build-debug/
+*.DS_Store
+*.in
+*.filt
+*.run
+venv/
+
 # Prerequisites
-*.d
+*.dSYM
 
 # Compiled Object files
 *.slo
