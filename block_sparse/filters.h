@@ -42,6 +42,8 @@ struct FilterHikp {
   Computes the required w.
   Allocates and returns the filter.
  */
+
+double Cheb(double m, double x);
 complex_t * make_dolphchebyshev_t(double lobefrac, double tolerance, int &w);
 
 complex_t * make_gaussian_t(double lobefrac, double tolerance, int &w);

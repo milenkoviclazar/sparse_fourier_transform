@@ -519,24 +519,18 @@ void tune_pruning(int n, int k0, int k1) {
 }
 
 int main() {
-    int n = 255;
+    int n = 1 << 18;
 
-    double Bcst_loc = 1.0;
-    int k = 100;
+    int B = 64;
+    for (B = 4; B < n / 16; B <<= 1) {
+        Filter dolph(n, B, 2, true);
+        dolph.dump("OUT/dolph.filt");
 
-    real_t BB_loc = (unsigned) (Bcst_loc * sqrt((double) n * k / (log2(n))));
-    double lobefrac_loc = 0.5 / (BB_loc);
-    int w_loc;
-    int b_loc = int(1.2 * 1.1 * ((double) n / BB_loc));
+        Filter bsft(n, B, 2, false);
+        bsft.dump("OUT/bsft.filt");
+        bsft.resize(0.93);
+        cout << "DOLPH: " << dolph.size<< ";   BSFT: " << bsft.size << endl;
+    }
 
-    lobefrac_loc = 0.11;
-    double tolerance_loc = 2e-9;
-
-    complex_t *filtert = make_dolphchebyshev_t(lobefrac_loc, tolerance_loc, w_loc);
-    FilterHikp f = make_multiple_t(filtert, w_loc, n, b_loc);
-    f.save_to_file("OUT/filter.filt");
-
-    Filter g(n, b_loc, 10);
-    g.dump("OUT/bsft.filt");
     return 0;
 }

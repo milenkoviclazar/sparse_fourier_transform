@@ -37,7 +37,7 @@ struct Filter {
 
     void dump_binary(const char *path);
 
-    Filter(int n, int B, int F);
+    Filter(int n, int B, int F, bool dolphchebyshev = true);
 
     Filter(const char *path, int n, int B, int F);
 

@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.10)
-project(cpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/local/include -L/usr/local/lib -Wall -O2 -Wconversion -std=c++03")
 
@@ -11,6 +10,15 @@ set(SRCS_OPT
         block_sparse/timer.cc
         block_sparse/filters.cc
         block_sparse/parameters.cc)
+
+set(SRCS_MIT
+        sFFT/computefourier.cc
+        sFFT/fftw.cc
+        sFFT/filters.cc
+        sFFT/parameters.cc
+        sFFT/plot.cc
+        sFFT/timer.cc
+        sFFT/utils.cc)
 
 add_executable(bsft_tests block_sparse/bsft_tests.cc ${SRCS_OPT})
 target_link_libraries(bsft_tests fftw3  m)
@@ -26,3 +34,6 @@ target_link_libraries(k_sparse_tuning fftw3  m)
 
 add_executable(run_experiment block_sparse/run_experiment.cc ${SRCS_OPT})
 target_link_libraries(run_experiment fftw3  m)
+
+add_executable(kaiserbessel sFFT/kaiserbessel.cc ${SRCS_MIT})
+target_link_libraries(kaiserbessel fftw3 m)

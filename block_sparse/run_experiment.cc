@@ -17,9 +17,9 @@ int main(int argc, char *argv[]) {
     int numberOfTests = 1;
 
     // TODO: Should be removed. It is a kind of a heuristic and should not work for general signals.
-    double hash_percentage = 1.0;
-    double sample_percentage = 1.0;
-    double val_percentage = 1.0;
+    double hash_percentage = 0.9;
+    double sample_percentage = 0.9;
+    double val_percentage = 0.9;
 
     size_t PATH_LENGTH = 128;
     char filterPath[PATH_LENGTH + 1];
@@ -102,12 +102,13 @@ int main(int argc, char *argv[]) {
 #endif
 
 //            for (double hash_percentage = 0.8; hash_percentage <= 1.0; hash_percentage += 0.5) {
-
+//
                 H_hash.resize(hash_percentage);
 
+//
 //                for (double sample_percentage = 0.6; sample_percentage <= 1.0; sample_percentage += 0.5) {
                     H_sample.resize(sample_percentage);
-
+//
 //                    for (double val_percentage = 0.75; val_percentage <= 1.0; val_percentage += 0.5) {
                         G_val.resize(val_percentage);
 

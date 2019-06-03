@@ -13,6 +13,7 @@
 #include "computefourier.h"
 #include "parameters.h"
 #include "utils.h"
+#include "filters.h"
 
 double TOTAL_TIME = 0.0;
 clock_t prev;
@@ -73,7 +74,6 @@ void Filter::resize(double energy_percent) {
             break;
         }
     }
-
 }
 
 void Filter::dump(const char *filename) {
@@ -159,50 +159,73 @@ Filter::Filter(const char *path, int n, int B, int F) {
     delete[] buff;
 }
 
-Filter::Filter(int n, int B, int F) {
+Filter::Filter(int n, int B, int F, bool dolphchebyshev) {
     this->n = n;
     this->B = B;
     this->F = F;
-    x = (complex_t *) calloc(n, sizeof(complex_t));
-    y = (complex_t *) calloc(n, sizeof(complex_t));
-    tmp = (complex_t *) calloc(n, sizeof(complex_t));
-    W = (complex_t *) calloc(n, sizeof(complex_t));
-    W_ = (complex_t *) calloc(n, sizeof(complex_t));
-    rect = (complex_t *) calloc(n, sizeof(complex_t));
-    time = (complex_t *) calloc(n, sizeof(complex_t));
-    freq = (complex_t *) calloc(n, sizeof(complex_t));
+    if (dolphchebyshev) {
+        double frac = 0.5 / B;
+        int b = int(1.4 * 1.1 * 2 * frac * n); // TODO: taken from HIKP... shall be tuned
+        int w3;
+        complex_t *filtert3 = (complex_t *)calloc(n, sizeof(complex_t));
+        complex_t *filterf3 = (complex_t *)calloc(n, sizeof(complex_t));
 
-    int Bprim = min(n >> 1, B << 4);
-    for (int i = 0; i < Bprim / 2; i++) {
-        W[i] = 1;
-        W[(n - i) % n] = 1;
-    }
+        tmp = make_dolphchebyshev_t(frac, 1e-9, w3);
+        memcpy(filtert3, tmp, w3*sizeof(*filtert3)); free(tmp);
+        make_multiple_t(filtert3, w3, n, b);
+        for (int i = 0; i < n; i++) {
+            filtert3[i] *= n;
+        }
+        shift(filtert3, n, - w3 / 2);
+        fftw_dft(filterf3, n, filtert3); // from time to freq shall need a normalization ?
+        for (int i = 0; i < n; i++) {
+            filterf3[i] /= n;
+        }
+        time = filtert3;
+        freq = filterf3;
+        size = w3 / 4;
+    } else {
+        x = (complex_t *) calloc(n, sizeof(complex_t));
+        y = (complex_t *) calloc(n, sizeof(complex_t));
+        tmp = (complex_t *) calloc(n, sizeof(complex_t));
+        W = (complex_t *) calloc(n, sizeof(complex_t));
+        W_ = (complex_t *) calloc(n, sizeof(complex_t));
+        rect = (complex_t *) calloc(n, sizeof(complex_t));
+        time = (complex_t *) calloc(n, sizeof(complex_t));
+        freq = (complex_t *) calloc(n, sizeof(complex_t));
 
-    for (int i = 0; i < Bprim / 2; i++) {
-        rect[i] = 1;
-        rect[(n - i) % n] = 1;
-    }
-    for (int i = 0; i < F - 1; i++) {
-        convolve(W, rect, n);
-    }
+        int Bprim = min(n >> 1, B << 4);
+        for (int i = 0; i < Bprim / 2; i++) {
+            W[i] = 1;
+            W[(n - i) % n] = 1;
+        }
 
-    fftw_dft(W_, n, W);
-    normalize(W_, n);
+        for (int i = 0; i < Bprim / 2; i++) {
+            rect[i] = 1;
+            rect[(n - i) % n] = 1;
+        }
+        for (int i = 0; i < F - 1; i++) {
+            convolve(W, rect, n);
+        }
 
-    for (int i = 0; i < n; i++) {
-        rect[i] = 0;
-    }
-    for (int i = 0; i < 0.95 * n / B; i++) {
-        rect[i] = 1;
-        rect[(n - i) % n] = 1;
-    }
+        fftw_dft(W_, n, W);
+        normalize(W_, n);
 
-    convolve(W_, rect, n);
-    for (int i = 0; i < n; i++) {
-        freq[i] = W_[i];
+        for (int i = 0; i < n; i++) {
+            rect[i] = 0;
+        }
+        for (int i = 0; i < 0.95 * n / B; i++) {
+            rect[i] = 1;
+            rect[(n - i) % n] = 1;
+        }
+
+        convolve(W_, rect, n);
+        for (int i = 0; i < n; i++) {
+            freq[i] = W_[i];
+        }
+        size = min(F * Bprim / 2, n / 2);
+        fftw_dft(time, n, freq, 1); // from freq to time no normalization
     }
-    size = min(F * Bprim / 2, n / 2);
-    fftw_dft(time, n, freq, 1);
 }
 
 void Filter::clr() {
@@ -514,6 +537,10 @@ void set_sparse_fft_parameters(
     }
 }
 
+bool cmp_abs(pair<int, complex_t> a, pair<int, complex_t> b) {
+    return cabs2(a.second) > cabs2(b.second);
+}
+
 void multi_block_locate(
         complex_t X[],
         int n,
@@ -595,8 +622,16 @@ void multi_block_locate(
                                              unusedVariable, sbthresh_loops[idx], sbloc_loops[idx],
                                              sbloc_loops[idx] + sbest_loops[idx],
                                              H_downsample, i, k1);
+        vector<pair<int, complex_t> > v;
         for (map<int, complex_t>::iterator it = ans.begin(); it != ans.end(); it++) {
-            if (cabs(it->second) > 0.01) {
+            v.push_back(*it);
+//            if (cabs(it->second) > 0.01) {
+//                blocks.insert(it->first * k1);
+//            }
+        }
+        sort(v.begin(), v.end(), cmp_abs);
+        for (vector<pair<int, complex_t> >::iterator it = v.begin(); it != v.end(); it++) {
+            if (cabs2(it->second) > 0.1 || blocks.size() < k0) {
                 blocks.insert(it->first * k1);
             }
         }
@@ -707,13 +742,20 @@ set<int> prune_location(
         }
     }
     set<int> ret;
+    vector<pair<int, complex_t> > v;
     for (int i = 0; i < freq_cnt; i++) {
         int ik1 = i / k1;
         nth_element(power[ik1], power[ik1] + (T / 2), power[ik1] + T);
-        if (power[ik1][T / 2] < theta) {
-            continue;
-        }
-        ret.insert(get_block_idx(freqs[i], k1, n) * k1);
+        v.push_back(make_pair(get_block_idx(freqs[i], k1, n) * k1, power[ik1][T / 2]));
+
+//        if (power[ik1][T / 2] < theta) {
+//            continue;
+//        }
+//        ret.insert(get_block_idx(freqs[i], k1, n) * k1);
+    }
+    sort(v.begin(), v.end(), cmp_abs);
+    for (int i = 0; i < min(k0, (int)v.size()); i++) {
+        ret.insert(v[i].first);
     }
     delete[] U;
     delete[] U_;
@@ -832,9 +874,7 @@ set<int> bsft_location(
         int iter_val,
         double theta_val) {
     set<int> blocks;
-//    cout << "BLOCK LOCATE" << endl;
     multi_block_locate(X, n, k0, k1, H_hash, H_downsample, blocks, B_loc, iter_loc, iter_budget);
-//    cout << "RPUNE" << endl;
     if (iter_val) {
         return prune_location(X, n, k0, k1, blocks, G_val, B_val, iter_val, theta_val);
     } else {
