@@ -125,7 +125,6 @@ void Filter::dump_binary(const char *path) {
     ofs.write(buff, size);
     memcpy(buff, freq, size);
     ofs.write(buff, size);
-
     ofs.close();
     delete[] buff;
 }
