@@ -2,7 +2,8 @@
 import os
 from datetime import datetime
 
-scratchFolderName =  "/scratch/milenkov/" + str(datetime.now()) + "/"
+timestamp_str = str(datetime.now()).replace(" ", "_")
+scratchFolderName =  "/scratch/milenkov/" + timestamp_str + "/"
 
 parameters = \
     """#!/bin/bash

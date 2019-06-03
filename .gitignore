@@ -1,5 +1,12 @@
 .idea/
 cmake-build-debug/
+block_sparse/bsft_tests
+block_sparse/experiment_samples
+block_sparse/generate_signals
+block_sparse/k_sparse_tuning
+block_sparse/precompute_filters
+block_sparse/run_experiment
+
 *.DS_Store
 *.in
 *.filt
