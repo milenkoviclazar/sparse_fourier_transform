@@ -158,6 +158,22 @@ Filter::Filter(const char *path, int n, int B, int F) {
     delete[] buff;
 }
 
+complex_t * make_dolphchebyshev_t_edited(double lobefrac, double tolerance, int &w){
+    w = min(w, int((1 / M_PI) * (1/lobefrac) * acosh(1./tolerance)));
+    if (!(w%2))
+        w--;
+    complex_t *x = (complex_t *)malloc(w*sizeof(*x));
+    double t0 = cosh(acosh(1/tolerance) / (w-1));
+    for(int i = 0; i < w; i++){
+        x[i] = Cheb(w-1, t0 * cos(M_PI * i / w)) * tolerance;
+    }
+    fftw_dft(x, w, x);
+    shift(x, w, w/2);
+    for(int i = 0; i < w; i++)
+        x[i] = creal(x[i]);
+    return x;
+}
+
 Filter::Filter(int n, int B, int F, bool dolphchebyshev) {
     this->n = n;
     this->B = B;
@@ -165,11 +181,11 @@ Filter::Filter(int n, int B, int F, bool dolphchebyshev) {
     if (dolphchebyshev) {
         double frac = 0.5 / B;
         int b = int(1.4 * 1.1 * 2 * frac * n); // TODO: taken from HIKP... shall be tuned
-        int w3;
         complex_t *filtert3 = (complex_t *)calloc(n, sizeof(complex_t));
         complex_t *filterf3 = (complex_t *)calloc(n, sizeof(complex_t));
 
-        tmp = make_dolphchebyshev_t(frac, 1e-9, w3);
+        int w3 = n;
+        tmp = make_dolphchebyshev_t_edited(frac, 1e-9, w3);
         memcpy(filtert3, tmp, w3*sizeof(*filtert3)); free(tmp);
         make_multiple_t(filtert3, w3, n, b);
         for (int i = 0; i < n; i++) {

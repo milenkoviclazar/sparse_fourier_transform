@@ -32,4 +32,4 @@ for n in range(18, 19):
             if k0 * k1 < pow(2, n) / 2:
                 os.system("%s -n %d -0 %d -1 %d -c 20 -p %s" % (signalExecPath, n, k0, k1, signalOutPath))
             k1 *= 2
-        k0 *= 2
+        k0 += 1

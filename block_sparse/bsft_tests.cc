@@ -521,16 +521,16 @@ void tune_pruning(int n, int k0, int k1) {
 int main() {
     int n = 1 << 18;
 
-    int B = 64;
-    for (B = 4; B < n / 16; B <<= 1) {
+    int B = 65536;
+//    for (B = 4; B < n / 16; B <<= 1) {
         Filter dolph(n, B, 2, true);
-        dolph.dump("OUT/dolph.filt");
+        dolph.dump("OUT/dolph_chebyshev.filt");
 
         Filter bsft(n, B, 2, false);
         bsft.dump("OUT/bsft.filt");
         bsft.resize(0.93);
         cout << "DOLPH: " << dolph.size<< ";   BSFT: " << bsft.size << endl;
-    }
+//    }
 
     return 0;
 }
