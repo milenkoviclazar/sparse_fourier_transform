@@ -49,9 +49,13 @@ double phase(complex_t x){
   return atan2(cimag(x), creal(x));
 }
 
-//double cabs2(complex_t x){
-//  return (creal(x) * creal(x) + cimag(x) * cimag(x));
-//}
+double cabs2(complex_t x){
+  return (creal(x) * creal(x) + cimag(x) * cimag(x));
+}
+
+bool cmp_abs(std::pair<int, complex_t> a, std::pair<int, complex_t> b) {
+    return cabs2(a.second) > cabs2(b.second);
+}
 
 // crappy inversion code I stole from elsewhere
 // Undefined if gcd(a, n) > 1

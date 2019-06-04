@@ -260,9 +260,9 @@ void Filter::clr() {
 
 
 // ********************************************* UTILITIES ********************************************* //
-double cabs2(complex_t x) {
-    return (__real__ x) * (__real__ x) + (__imag__ x) * (__imag__ x);
-}
+//double cabs2(complex_t x) {
+//    return (__real__ x) * (__real__ x) + (__imag__ x) * (__imag__ x);
+//}
 
 int get_block_idx(int i, int k1, int n) {
     return ((i + k1 / 2 - 1) / k1) % (n / k1);
@@ -537,8 +537,8 @@ void set_sparse_fft_parameters(
     int b_est = int(1.4 * 1.1 * ((double) n / BB_est));
 
     B_loc = floor_to_pow2(BB_loc);
-    B_thresh = 2 * k;
     B_est = floor_to_pow2(BB_est);
+    B_thresh = min(min(B_loc, B_est) / 2, 2 * k);
 
     W_Comb = floor_to_pow2(Comb_cst * n / B_loc);
 
@@ -553,10 +553,6 @@ void set_sparse_fft_parameters(
         complex_t *filtert_est = make_dolphchebyshev_t(lobefrac_est, tolerance_est, w_est);
         filters_est[make_pair(n, k)] = make_multiple_t(filtert_est, w_est, n, b_est);
     }
-}
-
-bool cmp_abs(pair<int, complex_t> a, pair<int, complex_t> b) {
-    return cabs2(a.second) > cabs2(b.second);
 }
 
 void multi_block_locate(

@@ -67,6 +67,8 @@ double AWGN(complex_t *x, int n, double std_noise);
 
 double cabs2(complex_t x);
 
+bool cmp_abs(std::pair<int, complex_t> a, std::pair<int, complex_t> b);
+
 double binomial_cdf(double prob, int n, int needed);
 
 #endif

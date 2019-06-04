@@ -20,7 +20,7 @@ parameters = \
 """
 
 
-folderName = "experiment_sbatch_files"
+folderName = "sbatch_files"
 if not os.path.exists(folderName):
     os.makedirs(folderName)
 

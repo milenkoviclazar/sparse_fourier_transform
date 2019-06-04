@@ -4,9 +4,11 @@
 #include <cstdlib>
 #include <cstring>
 #include <assert.h>
+#include <algorithm>
 
 #include "bsft.h"
 #include "computefourier.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -124,12 +126,20 @@ int main(int argc, char *argv[]) {
                         samples += count_samples_taken(n);
                         destruct_globals(n, k1);
 
+                        vector<pair<int, complex_t> > v;
                         set<int> ret;
                         for (map<int, complex_t>::iterator it = ans.begin(); it != ans.end(); it++) {
-                            if (cabs(it->second) < 0.001) {
-                                continue;
+//                            if (cabs(it->second) < 0.001) {
+//                                continue;
+//                            }
+
+                            v.push_back(make_pair(get_block_idx(it->first, k1, n) * k1, cabs(it->second)));
+                        }
+                        sort(v.begin(), v.end(), cmp_abs);
+                        for (int i = 0; i < v.size(); i++) {
+                            if (ret.size() < k0) {
+                                ret.insert(v[i].first);
                             }
-                            ret.insert(get_block_idx(it->first, k1, n) * k1);
                         }
                         if (blocks == ret) {
                             total_succ += 1;
