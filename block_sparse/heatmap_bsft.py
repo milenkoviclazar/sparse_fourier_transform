@@ -94,6 +94,6 @@ plt.ylabel("Number of samples")
 plt.xticks([i + 4 for i in range(0, 32, 4)], [i + 4 for i in range(0, 32, 4)])
 plt.yticks(range(0, lim, 10), ['%.0f' % (x * l) for x in range(0, lim, 10)])
 ax.invert_yaxis()
-plt.show()
 
-plt.savefig('/Users/milenkoviclazar/Desktop/bsft_%d_%d.png' % (n, K1))
+plt.show()
+# plt.savefig('/Users/milenkoviclazar/Desktop/bsft_%d_%d.png' % (n, K1))

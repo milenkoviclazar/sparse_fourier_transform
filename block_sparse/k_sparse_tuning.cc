@@ -69,14 +69,14 @@ int main(int argc, char *argv[]) {
     complex_t *X_ = new complex_t[n];
     complex_t *tmp = new complex_t[n];
     vector<double> bcsts;
-//    bcsts.push_back(0.2);
-//    bcsts.push_back(0.5);
+    bcsts.push_back(0.2);
+    bcsts.push_back(0.5);
     bcsts.push_back(1);
-//    bcsts.push_back(2);
+    bcsts.push_back(2);
 //    bcsts.push_back(4);
-    for (loc_loops = 4; loc_loops <= 14; loc_loops += 2) {
+    for (loc_loops = 2; loc_loops <= 30; loc_loops += 2) {
         int threshold_loops = loc_loops - 1;
-        for (est_loops = 8; est_loops <= 20; est_loops += 2) {
+        for (est_loops = 2; est_loops <= 30; est_loops += 2) {
             for (int i_loc = 0; i_loc < bcsts.size(); i_loc++) {
                 for (int i_est = 0; i_est < bcsts.size(); i_est++) {
                     Bcst_loc = bcsts[i_loc];

@@ -498,14 +498,15 @@ void set_sparse_fft_parameters(
         double Bcst_est,
         bool getDefaultValues) {
     double Comb_cst = 16;
-    double tolerance_loc = 0.01;
-    double tolerance_est = 0.01;
-//    cout << k << endl;
+    double tolerance_loc = 1e-8;
+    double tolerance_est = 1e-8;
     if (getDefaultValues) {
         Bcst_loc = 1.0;
         Bcst_est = 1.0;
         loc_loops = 5;
         est_loops = 1;
+        tolerance_loc = 1e-1;
+        tolerance_est = 1e-1;
 //        if (k <= 2) {
 //            loc_loops = 5;
 //            est_loops = 0;
@@ -902,7 +903,6 @@ set<int> bsft_location(
     } else {
         return blocks;
     }
-
 }
 
 void set_parameters(

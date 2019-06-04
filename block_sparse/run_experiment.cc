@@ -79,9 +79,9 @@ int main(int argc, char *argv[]) {
     cout << "n, k0, k1, B_loc, B_val, iter_loc, iter_budget, iter_val, hash_p, val_p, sample_p, "
             "avg_samples, avg_time, succ_prob" << endl;
 
-    for (int B_loc_mult = 1; B_loc_mult < 8; B_loc_mult <<= 1) {
+    for (int B_loc_mult = 1; B_loc_mult < 8; B_loc_mult++) {
         int B_loc = round_to_power2(B_loc_mult * k0);
-        for (int B_val_mult = 1; B_val_mult < 256; B_val_mult <<= 1) {
+        for (int B_val_mult = 1; B_val_mult < 128; B_val_mult += 2) {
             int B_val = round_to_power2(B_val_mult * k0 * k1);
 
 #ifdef __APPLE__
@@ -113,8 +113,8 @@ int main(int argc, char *argv[]) {
                         G_val.resize(val_percentage);
 
                         int iter_budget = k0;
-                        for (int iter_loc = 0; iter_loc < 10; iter_loc++) {
-                            for (int iter_val = 1; iter_val < 40; iter_val++) {
+                        for (int iter_loc = 0; iter_loc < 10; iter_loc += 3) {
+                            for (int iter_val = 1; iter_val < 40; iter_val += 3) {
                                 double ticks = 0;
                                 double succ = 0;
                                 double samples = 0;
