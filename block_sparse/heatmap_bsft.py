@@ -10,6 +10,7 @@ import numpy as np
 path = sys.argv[1] + '/'
 onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
 
+
 max_y = {}
 max_y[18] = {}
 max_y[18][4] = 9082

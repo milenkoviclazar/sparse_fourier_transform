@@ -20,7 +20,7 @@ parameters = \
 """
 
 
-folderName = "sbatch_files"
+folderName = "sbatch_experiment_files"
 if not os.path.exists(folderName):
     os.makedirs(folderName)
 
@@ -29,7 +29,7 @@ if not os.path.exists(scratchFolderName):
 
 n = 18
 k0 = 1
-while k0 <= 16:
+while k0 <= 32:
     k1 = 4
     while k1 <= 64:
         x = 0.9

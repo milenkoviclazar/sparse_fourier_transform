@@ -113,8 +113,8 @@ int main(int argc, char *argv[]) {
                         G_val.resize(val_percentage);
 
                         int iter_budget = k0;
-                        for (int iter_loc = 0; iter_loc < 10; iter_loc += 3) {
-                            for (int iter_val = 1; iter_val < 40; iter_val += 3) {
+                        for (int iter_loc = 1; iter_loc < 10; iter_loc += 1) {
+                            for (int iter_val = 1; iter_val < 10; iter_val += 1) {
                                 double ticks = 0;
                                 double succ = 0;
                                 double samples = 0;

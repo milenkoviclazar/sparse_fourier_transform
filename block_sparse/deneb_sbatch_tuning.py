@@ -14,7 +14,7 @@ parameters = \
 #SBATCH --mem 50GB
 #SBATCH --time 06:00:00
 
-/home/milenkov/fidis/sparse_fourier_transform/block_sparse/k_sparse_tuning -n %d -0 %d -1 %d -c 20 \
+/home/milenkov/deneb/sparse_fourier_transform/block_sparse/k_sparse_tuning -n %d -0 %d -1 %d -c 20 \
 -p /scratch/milenkov/signals/"""
 
 
