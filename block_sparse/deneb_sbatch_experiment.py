@@ -28,10 +28,10 @@ if not os.path.exists(scratchFolderName):
     os.makedirs(scratchFolderName)
 
 n = 18
-k0 = 2
-while k0 <= 8:
+k0 = 1
+while k0 <= 16:
     k1 = 4
-    while k1 <= 64:
+    while k1 <= 128:
         x = 0.9
         y = 0.9
         z = 0.9

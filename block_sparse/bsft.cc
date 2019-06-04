@@ -500,26 +500,28 @@ void set_sparse_fft_parameters(
     double Comb_cst = 16;
     double tolerance_loc = 0.01;
     double tolerance_est = 0.01;
-
+//    cout << k << endl;
     if (getDefaultValues) {
         Bcst_loc = 1.0;
         Bcst_est = 1.0;
-        if (k <= 2) {
-            loc_loops = 6;
-            est_loops = 8;
-        } else if (k <= 4) {
-            loc_loops = 7;
-            est_loops = 10;
-        } else if (k <= 8) {
-            loc_loops = 8;
-            est_loops = 10;
-        } else if (k <= 16) {
-            loc_loops = 8;
-            est_loops = 12;
-        } else {
-            loc_loops = 9;
-            est_loops = 12;
-        }
+        loc_loops = 5;
+        est_loops = 1;
+//        if (k <= 2) {
+//            loc_loops = 5;
+//            est_loops = 0;
+//        } else if (k <= 4) {
+//            loc_loops = 5;
+//            est_loops = 0;
+//        } else if (k <= 8) {
+//            loc_loops = 5;
+//            est_loops = 0;
+//        } else if (k <= 16) {
+//            loc_loops = 5;
+//            est_loops = 0;
+//        } else {
+//            loc_loops = 5;
+//            est_loops = 0;
+//        }
         threshold_loops = loc_loops - 1;
     }
 
@@ -893,6 +895,7 @@ set<int> bsft_location(
         int iter_val,
         double theta_val) {
     set<int> blocks;
+
     multi_block_locate(X, n, k0, k1, H_hash, H_downsample, blocks, B_loc, iter_loc, iter_budget);
     if (iter_val) {
         return prune_location(X, n, k0, k1, blocks, G_val, B_val, iter_val, theta_val);
