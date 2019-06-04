@@ -14,7 +14,7 @@ parameters = \
 #SBATCH --mem 50GB
 #SBATCH --time 06:00:00
 
-/home/milenkov/deneb/bsfft/optimized/run_experiment -n %d -0 %d -1 %d -c 20 -x %f -y %f -z %f \
+/home/milenkov/deneb/sparse_fourier_transform/block_sparse/run_experiment -n %d -0 %d -1 %d -c 20 -x %f -y %f -z %f \
 -p /scratch/milenkov/signals/ \
 -q /scratch/milenkov/filters/
 """

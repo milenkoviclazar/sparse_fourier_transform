@@ -646,7 +646,7 @@ void multi_block_locate(
         }
         sort(v.begin(), v.end(), cmp_abs);
         for (vector<pair<int, complex_t> >::iterator it = v.begin(); it != v.end(); it++) {
-            if (cabs2(it->second) > 0.1 || blocks.size() < k0) {
+            if (cabs(it->second) > 0.1 || blocks.size() < k0) {
                 blocks.insert(it->first * k1);
             }
         }
@@ -769,9 +769,13 @@ set<int> prune_location(
 //        ret.insert(get_block_idx(freqs[i], k1, n) * k1);
     }
     sort(v.begin(), v.end(), cmp_abs);
-    for (int i = 0; i < min(k0, (int)v.size()); i++) {
-        ret.insert(v[i].first);
+//    cout << v.size() << " " << k0 <<endl;
+    for (int i = 0; i < v.size(); i++) {
+        if (ret.size() < k0) {
+            ret.insert(v[i].first);
+        }
     }
+//    cout << ret.size() << " " << k0 << endl;
     delete[] U;
     delete[] U_;
     for (int i = 0; i < blocks.size(); i++) {
