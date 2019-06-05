@@ -2,7 +2,7 @@
 import os
 from datetime import datetime
 
-timestamp_str = str(datetime.now()).replace(" ", "_")
+timestamp_str = str(datetime.now()).replace(" ", "_").replace(":", "_")
 scratchFolderName =  "/scratch/milenkov/" + timestamp_str + "/"
 
 parameters = \
@@ -27,9 +27,8 @@ if not os.path.exists(folderName):
 if not os.path.exists(scratchFolderName):
     os.makedirs(scratchFolderName)
 
-n = 18
-k0 = 1
-while k0 <= 32:
+n = 22
+for k0 in range(1, 33):
     k1 = 4
     while k1 <= 64:
         x = 0.9
@@ -40,4 +39,3 @@ while k0 <= 32:
         file.write(parameters % (scratchFolderName, n, k0, k1, x, y, z))
         file.close()
         k1 *= 2
-    k0 += 1

@@ -2,7 +2,7 @@
 import os
 from datetime import datetime
 
-timestamp_str = str(datetime.now()).replace(" ", "_")
+timestamp_str = str(datetime.now()).replace(" ", "_").replace(":", "_")
 scratchFolderName =  "/scratch/milenkov/" + timestamp_str + "/"
 
 parameters = \
@@ -18,15 +18,15 @@ parameters = \
 -p /scratch/milenkov/signals/"""
 
 
-folderName = "sbatch_tunint_files"
+folderName = "sbatch_tuning_files"
 if not os.path.exists(folderName):
     os.makedirs(folderName)
 
 if not os.path.exists(scratchFolderName):
     os.makedirs(scratchFolderName)
 
-n = 18
-for k0 in range(33):
+n = 22
+for k0 in range(1, 33):
     k1 = 4
     while k1 <= 64:
         file = open(folderName + ("/tune_k_sparse_%d_%d_%d.run" % (n, k0, k1)), "w")

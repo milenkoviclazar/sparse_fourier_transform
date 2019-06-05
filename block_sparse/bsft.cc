@@ -501,8 +501,8 @@ void set_sparse_fft_parameters(
     double tolerance_loc = 1e-8;
     double tolerance_est = 1e-8;
     if (getDefaultValues) {
-        Bcst_loc = 1.0;
-        Bcst_est = 1.0;
+        Bcst_loc = 1;
+        Bcst_est = 1;
         loc_loops = 5;
         est_loops = 1;
         tolerance_loc = 1e-1;

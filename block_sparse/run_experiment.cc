@@ -16,7 +16,6 @@ int main(int argc, char *argv[]) {
     int pow = -1;
     int numberOfTests = 1;
 
-    // TODO: Should be removed. It is a kind of a heuristic and should not work for general signals.
     double hash_percentage = 0.9;
     double sample_percentage = 0.9;
     double val_percentage = 0.9;
@@ -81,8 +80,8 @@ int main(int argc, char *argv[]) {
 
     for (int B_loc_mult = 1; B_loc_mult < 8; B_loc_mult++) {
         int B_loc = round_to_power2(B_loc_mult * k0);
-        for (int B_val_mult = 1; B_val_mult < 128; B_val_mult += 2) {
-            int B_val = round_to_power2(B_val_mult * k0 * k1);
+        for (int B_val_mult = 1; B_val_mult < 32; B_val_mult += 1) {
+            int B_val = round_to_power2(B_val_mult * k1);
 
 #ifdef __APPLE__
             Filter H_hash(n / k1, B_loc, F_loc);
@@ -114,7 +113,7 @@ int main(int argc, char *argv[]) {
 
                         int iter_budget = k0;
                         for (int iter_loc = 1; iter_loc < 10; iter_loc += 1) {
-                            for (int iter_val = 1; iter_val < 10; iter_val += 1) {
+                            for (int iter_val = 1; iter_val < 20; iter_val += 1) {
                                 double ticks = 0;
                                 double succ = 0;
                                 double samples = 0;

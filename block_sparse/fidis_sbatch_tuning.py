@@ -2,7 +2,7 @@
 import os
 from datetime import datetime
 
-timestamp_str = str(datetime.now()).replace(" ", "_")
+timestamp_str = str(datetime.now()).replace(" ", "_").replace(":", "_")
 scratchFolderName =  "/scratch/milenkov/" + timestamp_str + "/"
 
 parameters = \
@@ -18,7 +18,7 @@ parameters = \
 -p /scratch/milenkov/signals/"""
 
 
-folderName = "sbatch_tunint_files"
+folderName = "sbatch_tuning_files"
 if not os.path.exists(folderName):
     os.makedirs(folderName)
 

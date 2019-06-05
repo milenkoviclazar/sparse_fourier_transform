@@ -11,7 +11,7 @@ filterOutPath = sys.argv[2] + "/"
 if not os.path.exists(filterOutPath):
     os.makedirs(filterOutPath)
 
-for n in range(18, 19):
+for n in range(19, 23):
     b = 2
     while b <= pow(2, n) / 2:
         os.system("%s -n %d -b %d -p %s" % (filterExecPath, n, b, filterOutPath))
@@ -23,7 +23,7 @@ signalOutPath = sys.argv[4] + "/"
 if not os.path.exists(signalOutPath):
     os.makedirs(signalOutPath)
 
-for n in range(18, 19):
+for n in range(19, 23):
     k0 = 1
     while k0 <= 32:
         k1 = 2
