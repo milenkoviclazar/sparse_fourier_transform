@@ -23,7 +23,8 @@ signalOutPath = sys.argv[4] + "/"
 if not os.path.exists(signalOutPath):
     os.makedirs(signalOutPath)
 
-for n in range(19, 23):
+n_vals = [18, 22]
+for n in n_vals:
     k0 = 1
     while k0 <= 32:
         k1 = 2

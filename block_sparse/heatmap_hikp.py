@@ -19,11 +19,11 @@ def gen(K1):
     max_y[18][32] = 18196
     max_y[18][64] = 21534
     max_y[22] = {}
-    max_y[22][4] = 53076
-    max_y[22][8] = 73109
-    max_y[22][16] = 99612
-    max_y[22][32] = 133786
-    max_y[22][64] = 176110
+    max_y[22][4] = 15922
+    max_y[22][8] = 21932
+    max_y[22][16] = 29883
+    max_y[22][32] = 53514
+    max_y[22][64] = 88055
     for entry in max_y:
         for e in max_y[entry]:
             max_y[entry][e] *= 10
@@ -84,7 +84,7 @@ def gen(K1):
                 best = max(best, mat[j][i])
             mat[j][i] = best
 
-    ax = sns.heatmap(mat)
+    ax = sns.heatmap(mat, vmin=0.0, vmax=1.0)
 
     plt.title("Best precision per samples taken")
     plt.xlabel("k0")
@@ -93,8 +93,9 @@ def gen(K1):
     plt.yticks(range(0, lim, 10), ['%.0f' % (x * l) for x in range(0, lim, 10)])
     ax.invert_yaxis()
 
-    # plt.show()
-    plt.savefig(path + 'hikp_%d_%d.png' % (n, K1))
+    fig = plt.gcf()
+    plt.show()
+    fig.savefig(path + ('hikp_%d_%d.png' % (n, K1)))
     plt.clf()
 
 
