@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
             "avg_samples, avg_time, succ_prob" << endl;
 
     for (int B_loc = 2; B_loc < 256; B_loc <<= 1) {
-        for (int B_val = k1; B_val < 1024; B_val <<= 1) {
+        for (int B_val = 64; B_val < 1024; B_val <<= 1) {
 
 
 #ifdef __APPLE__
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
 
                         int iter_budget = k0;
                         int iter_loc = 2;
-                            for (int iter_val = 1; iter_val < 20; iter_val += 1) {
+                            for (int iter_val = 1; iter_val < 20; iter_val += 3) {
                                 double ticks = 0;
                                 double succ = 0;
                                 double samples = 0;

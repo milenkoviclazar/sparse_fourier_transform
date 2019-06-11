@@ -76,9 +76,10 @@ int main(int argc, char *argv[]) {
     bcsts.push_back(1);
     bcsts.push_back(2);
 //    bcsts.push_back(4);
-    for (loc_loops = 2; loc_loops <= 30; loc_loops += 2) {
+    for (loc_loops = 2; loc_loops <= 30; loc_loops += 2) { // TODO: increase by 1 and reduce the range
         int threshold_loops = loc_loops - 1;
-        for (est_loops = 2; est_loops <= 30; est_loops += 2) {
+        // TODO: what about tolerance? maybe make it iterate in {1e-9, 1e-8, 1e-7, 1e-6}
+        for (est_loops = 2; est_loops <= 30; est_loops += 2) { // TODO: increase by 1 and reduce the range
             for (int i_loc = 0; i_loc < bcsts.size(); i_loc++) {
                 for (int i_est = 0; i_est < bcsts.size(); i_est++) {
                     Bcst_loc = bcsts[i_loc];
@@ -145,7 +146,7 @@ int main(int argc, char *argv[]) {
                             total_succ += 1;
                         }
                     }
-                    double avg_samples = samples / numberOfTests / n;
+                    double avg_samples = samples / numberOfTests / n; // TODO: remove division by n
                     double avg_time = ticks / numberOfTests / CLOCKS_PER_SEC;
                     double avg_precision = total_succ / numberOfTests;
                     cout << n << ", " << k0 << ", " << k1 << ", " << Bcst_loc << ", " << Bcst_est << ", " <<

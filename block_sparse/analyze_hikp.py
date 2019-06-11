@@ -27,16 +27,12 @@ for entry in max_y:
     for e in max_y[entry]:
         max_y[entry][e] *= 10
 
-# 0, 1 , 2 ,   3  ,  4   ,     5   ,      6     ,    7    ,   8   ,   9  ,   10    ,     11     ,   12    ,   13
-# n, k0, k1, B_loc, B_val, iter_loc, iter_budget, iter_val, hash_p, val_p, sample_p, avg_samples, avg_time, succ_prob
+K0 = 4
+K1 = 32
+
 max_samples = 0
 best = {}
 cnt = {}
-
-K1 = 4
-K0 = 5
-
-best_parameters = {}
 
 for file in onlyfiles:
     if file[0] == ".":
@@ -46,7 +42,7 @@ for file in onlyfiles:
     with open(path + file, 'r') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            if len(row) != 14:
+            if len(row) != 11:
                 continue
             try:
                 n = int(row[0])
@@ -56,26 +52,28 @@ for file in onlyfiles:
                 # print(row)
                 continue
 
-            samples = float(row[11])
+            samples = float(row[8]) * n  # TODO: remove multiplication by n
             max_samples = max(max_samples, samples)
-            precision = float(row[13])
+            precision = float(row[9])
+
             if k1 != K1:
                 continue
-
-            if precision < 1:
+            if k0 != K0:
                 continue
-            if (k0, k1) not in best_parameters or \
-                    best_parameters[(k0, k1)][0] > samples:
-                best_parameters[(k0, k1)] = (samples, row)
+
+            if precision < 0.5:
+                continue
+            if samples > 100000:
+                continue
+            print(row)
+            # print(csvfile)
             if (k0, samples) not in best:
                 best[(samples, k0)] = precision
             else:
                 best[(samples, k0)] = max(best[(samples, k0)], precision)
 
-for x in best_parameters:
-    print(x, best_parameters[x])
-
 quit()
+
 n = int(math.log2(n))
 max_samples = max_y[n][K1]
 lim = 100
@@ -111,5 +109,6 @@ ax.invert_yaxis()
 
 fig = plt.gcf()
 plt.show()
-fig.savefig(path + ('bsft_%d_%d.png' % (n, K1)))
+fig.savefig(path + ('hikp_%d_%d.png' % (n, K1)))
 plt.clf()
+
