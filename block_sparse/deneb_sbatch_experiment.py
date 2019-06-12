@@ -27,10 +27,17 @@ if not os.path.exists(folderName):
 if not os.path.exists(scratchFolderName):
     os.makedirs(scratchFolderName)
 
+rng = {}
+rng[4] = range(12, 33)
+rng[8] = range(24, 33)
+rng[16] = range(24, 33)
+rng[32] = range(15, 33)
+rng[64] = range(10, 33)
+
 n = 22
-for k0 in range(1, 33):
-    k1 = 4
-    while k1 <= 64:
+k1 = 4
+while k1 <= 64:
+    for k0 in rng[k1]:
         x = 0.9
         y = 0.9
         z = 0.9
@@ -38,4 +45,4 @@ for k0 in range(1, 33):
         file = open(folderName + ("/experiment_%d_%d_%d_%f_%f_%f.run" % (n, k0, k1, x, y, z)), "w")
         file.write(parameters % (scratchFolderName, n, k0, k1, x, y, z))
         file.close()
-        k1 *= 2
+    k1 *= 2

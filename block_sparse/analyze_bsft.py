@@ -33,9 +33,13 @@ max_samples = 0
 best = {}
 cnt = {}
 
-K1 = 4
-K0 = 5
+K1 = 64
 
+K0 = 12
+
+# TODO: find why others did not produce bad parameters:
+# TODO: find out whether the job was terminated
+# TODO: or just did not reach the optimum parameters
 best_parameters = {}
 
 for file in onlyfiles:
@@ -59,21 +63,40 @@ for file in onlyfiles:
             samples = float(row[11])
             max_samples = max(max_samples, samples)
             precision = float(row[13])
-            if k1 != K1:
-                continue
-
+            # if k1 != K1:
+            #     continue
+            # if (k0 == K0):
+            #     print(csvfile)
             if precision < 1:
                 continue
+
             if (k0, k1) not in best_parameters or \
                     best_parameters[(k0, k1)][0] > samples:
                 best_parameters[(k0, k1)] = (samples, row)
+                # B_loc = int(row[3])
+                # print(B_loc /k1)
+                # B_val = int(row[4])
+                # print(B_val / (k0 * k1))
+
             if (k0, samples) not in best:
                 best[(samples, k0)] = precision
             else:
                 best[(samples, k0)] = max(best[(samples, k0)], precision)
 
-for x in best_parameters:
-    print(x, best_parameters[x])
+maxi = 0
+mini = 10000
+for x in sorted(best_parameters):
+    B_loc = int(best_parameters[x][1][3])
+    B_val = int(best_parameters[x][1][4])
+    k0 = int(best_parameters[x][1][1])
+    k1 = int(best_parameters[x][1][2])
+    # print(x, best_parameters[x])
+    if (B_loc / k0 < mini):
+        print(x, B_loc, k0, B_loc / k0)
+
+    maxi = max(maxi, B_loc / k0)
+    mini = min(mini, B_loc / k0)
+print(mini, maxi)
 
 quit()
 n = int(math.log2(n))

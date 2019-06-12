@@ -78,8 +78,10 @@ int main(int argc, char *argv[]) {
     cout << "n, k0, k1, B_loc, B_val, iter_loc, iter_budget, iter_val, hash_p, val_p, sample_p, "
             "avg_samples, avg_time, succ_prob" << endl;
 
-    for (int B_loc = 2; B_loc < 256; B_loc <<= 1) {
-        for (int B_val = 64; B_val < 1024; B_val <<= 1) {
+    int B_loc = max(2, round_to_power2(k0 / 14));
+    for (int cnt_loc = 0; cnt_loc < 10; cnt_loc++, (B_loc <<= 1)) {
+        int B_val = round_to_power2(k0 * k1);
+        for (int cnt_val = 0; cnt_val < 7; cnt_val++, (B_val <<= 1)) {
 
 
 #ifdef __APPLE__
@@ -112,7 +114,7 @@ int main(int argc, char *argv[]) {
 
                         int iter_budget = k0;
                         int iter_loc = 2;
-                            for (int iter_val = 1; iter_val < 20; iter_val += 3) {
+                            for (int iter_val = 1; iter_val < 20; iter_val += 4) {
                                 double ticks = 0;
                                 double succ = 0;
                                 double samples = 0;
